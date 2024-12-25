@@ -70,6 +70,12 @@ export default function TodoApp() {
     fetchTasks();
   }, []);
 
+  useEffect(() => {
+    if (suggestion) {
+      console.log("Current suggestion:", suggestion);
+    }
+  }, [suggestion]);
+
   const addTask = (
     taskData: Omit<Task, "id" | "completed" | "createdAt" | "completedAt">
   ) => {
@@ -239,7 +245,7 @@ export default function TodoApp() {
             <div className="space-y-6">
               <AIInsights
                 tasks={tasks}
-                onSuggestedTagClick={(tag) => {
+                onSuggestedTagClickAction={(tag) => {
                   if (!selectedTags.includes(tag)) {
                     setSelectedTags([...selectedTags, tag]);
                   }
