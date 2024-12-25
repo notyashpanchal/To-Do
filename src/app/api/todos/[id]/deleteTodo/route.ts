@@ -1,5 +1,5 @@
 import { prisma } from "@/utils/prisma";
-import { NextApiRequest} from "next";
+import { NextRequest } from "next/server";
 // import Todo from "@/types/todo";
 import { NextResponse } from "next/server";
 
@@ -7,9 +7,9 @@ import { NextResponse } from "next/server";
 //     todos : Todo[]
 // }
 
-export async function DELETE(request:NextApiRequest) {
+export async function DELETE(request: NextRequest) {
     try {
-        const todoId = request.query.id as string;
+        const todoId = request.nextUrl.pathname.split('/')[4];
 
         if (!todoId || typeof todoId !== 'string') {
             return NextResponse.json({ error: 'Invalid ID provided.' }, { status: 400 });
