@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Loader2 } from "lucide-react";
 import { useAiSuggestions } from "@/lib/use-ai-suggestions";
+import React, { useState } from "react";
 
 interface Task {
   title: string;
@@ -19,7 +20,8 @@ export function TaskSuggestions({
   tasks,
   onAddSuggestion,
 }: TaskSuggestionsProps) {
-  const { suggestions, isLoading } = useAiSuggestions(tasks);
+  const { suggestions: aiSuggestions, isLoading } = useAiSuggestions(tasks);
+  const [suggestions, setSuggestions] = useState(aiSuggestions);
 
   return (
     <AnimatePresence mode="wait">
@@ -49,10 +51,16 @@ export function TaskSuggestions({
                   key={suggestion.title}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <button
-                    onClick={() => onAddSuggestion(suggestion)}
+                    onClick={() => {
+                      setSuggestions((prev) =>
+                        prev.filter((s) => s.title !== suggestion.title)
+                      );
+                      onAddSuggestion(suggestion);
+                    }}
                     className="group relative flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-left transition-colors hover:border-white/20 hover:bg-white/10"
                   >
                     <div className="flex-1 space-y-1">

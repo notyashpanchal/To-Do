@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-// import { generateText } from "ai"
-// import { openai } from "@ai-sdk/openai"
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 interface Task {
   title: string
@@ -69,7 +69,7 @@ export function useTaskAnalysis(tasks: Task[]) {
         }))
 
         const { text } = await generateText({
-          model: openai("gpt-4o"),
+          model: openai("gpt-3.5-turbo"),
           system: "You are an AI productivity analyst. Analyze task patterns and provide insights in JSON format.",
           prompt: `Analyze these tasks and provide scores and insights:
             ${JSON.stringify(taskData)}

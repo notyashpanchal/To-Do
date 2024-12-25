@@ -16,7 +16,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-// import { useAudio } from "@/lib/use-audio";
 import { useGestureControls } from "@/lib/use-gesture-controls";
 import { useEffect, useRef, useState } from "react";
 
@@ -41,10 +40,8 @@ export function TaskCard({
   task,
   onComplete,
   onDelete,
-  index,
   isConnectedToNext,
 }: TaskCardProps) {
-  const { play } = useAudio();
   const cardRef = useRef<HTMLDivElement>(null);
   const { onGesture } = useGestureControls();
   const [isHovered, setIsHovered] = useState(false);
@@ -93,7 +90,6 @@ export function TaskCard({
     const handleMouseEnter = () => {
       setIsHovered(true);
       scale.set(1.02);
-      play("hover");
     };
 
     const handleMouseLeave = () => {
@@ -119,7 +115,6 @@ export function TaskCard({
     rotateX,
     rotateY,
     scale,
-    play,
     onGesture,
     task.id,
     onDelete,
@@ -210,7 +205,6 @@ export function TaskCard({
               whileTap={{ scale: 0.9 }}
               onClick={() => {
                 onComplete(task.id);
-                play(task.completed ? "click" : "complete");
               }}
               className={cn(
                 "relative h-5 w-5 md:h-6 md:w-6 shrink-0 rounded-lg border-2 border-white/20",
@@ -273,7 +267,6 @@ export function TaskCard({
                 whileTap={{ scale: 0.9 }}
                 onClick={() => {
                   onDelete(task.id);
-                  play("delete");
                 }}
                 className="rounded-lg p-1.5 md:p-2 text-white/40 transition-colors hover:bg-rose-500/20 hover:text-rose-400"
               >

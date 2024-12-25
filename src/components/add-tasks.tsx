@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import axios from "axios";
 interface AddTaskProps {
   onAdd: (task: {
     title: string;
@@ -36,20 +36,25 @@ export function AddTask({ onAdd }: AddTaskProps) {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (title.trim()) {
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(`api/createTodo`, {
+        title,
+        priority,
+        dueDate: dueDate ? dueDate.toISOString() : undefined,
+        tags,
+      });
+      if (response.status !== 201) {
+        throw new Error("Failed to create todo");
+      }
       onAdd({
         title,
         priority,
-        dueDate: dueDate?.toLocaleDateString(),
-        tags: tags.length > 0 ? tags : undefined,
+        dueDate: dueDate ? dueDate.toISOString() : undefined,
+        tags,
       });
-      setTitle("");
-      setPriority("medium");
-      setDueDate(undefined);
-      setTags([]);
-      setIsExpanded(false);
+    } catch (error) {
+      console.error("Error submitting task:", error);
     }
   };
 
@@ -81,7 +86,7 @@ export function AddTask({ onAdd }: AddTaskProps) {
             <Button
               type="submit"
               size="icon"
-              className="absolute right-1 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:scale-105 active:scale-95"
+              className="absolute right-0 top-1/2 -translate-y-1/2 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:scale-105 active:scale-95"
             >
               <Plus className="h-4 w-4" />
               <span className="sr-only">Add task</span>

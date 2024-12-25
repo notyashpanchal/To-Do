@@ -153,7 +153,7 @@ export function NeuralBackground() {
           ctx.fillStyle = gradient;
           ctx.arc(x, y, radius * 2, 0, Math.PI * 2);
           ctx.fill();
-        } catch (error) {
+        } catch {
           // Fallback to solid color if gradient creation fails
           ctx.fillStyle = node.color;
           ctx.arc(x, y, radius, 0, Math.PI * 2);

@@ -1,9 +1,8 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
-// import { generateText } from "ai"
-// import { openai } from "@ai-sdk/openai"
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 interface Task {
   title: string
@@ -28,6 +27,7 @@ const fallbackSuggestions: Task[] = [
     tags: ["meeting"]
   }
 ]
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY; 
 
 export function useAiSuggestions(tasks: Task[]) {
   const [suggestions, setSuggestions] = useState<Task[]>(fallbackSuggestions)
@@ -48,9 +48,9 @@ export function useAiSuggestions(tasks: Task[]) {
           .join("\n")
 
         const { text } = await generateText({
-          model: openai("gpt-4o"),
+          model: openai("gpt-4", { apiKey: OPENAI_API_KEY }),
           system: "You are an AI task assistant. Based on the user's existing tasks, suggest 3 relevant follow-up tasks in a structured format: title|||priority|||tags (comma-separated). Each task on a new line.",
-          prompt: `Based on these tasks:\n${taskContext}\n\nSuggest 3 relevant follow-up tasks that would help complete the project or achieve the goals implied by the existing tasks.`
+          prompt: `Based on these tasks:\n${taskContext}\n\nSuggest 3 relevant follow-up tasks that would help complete the project or achieve the goals implied by the existing tasks.`,
         })
 
         const newSuggestions = text.split("\n").map(suggestion => {
@@ -81,4 +81,3 @@ export function useAiSuggestions(tasks: Task[]) {
 
   return { suggestions, isLoading, error }
 }
-

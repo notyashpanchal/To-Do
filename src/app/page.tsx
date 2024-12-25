@@ -9,7 +9,6 @@ import { ProductivityInsights } from "@/components/productivity-insight";
 import { AIInsights } from "@/components/ai-insight";
 import { TaskSuggestions } from "@/components/task-suggestions";
 import { Brain, Command, Sparkles } from "lucide-react";
-// import { useAudio } from "./lib/use-audio";
 import { useKeyboardShortcuts } from "@/lib/use-keyboard-shortcuts";
 
 interface Task {
@@ -37,7 +36,6 @@ export default function TodoApp() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [suggestion, setSuggestion] = useState("");
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  // const { play } = useAudio();
   const mouseY = useMotionValue(0);
 
   // Keyboard shortcuts
@@ -58,10 +56,29 @@ export default function TodoApp() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch(`/api/todos`);
+      const responseData = await response.text();
+      if (!response.ok) {
+        throw new Error(responseData || "Failed to fetch tasks");
+      }
+      const data = responseData ? JSON.parse(responseData) : {};
+      setTasks(Array.isArray(data.todos) ? data.todos : []);
+    };
+
+    fetchTasks();
+  }, []);
+
   const addTask = (
     taskData: Omit<Task, "id" | "completed" | "createdAt" | "completedAt">
   ) => {
-    play("add");
+    // Add validation to prevent empty todos
+    if (!taskData.title || taskData.title.trim() === " ") {
+      console.error("Cannot add an empty todo.");
+      return; // Exit the function if the title is empty
+    }
+
     setTasks([
       {
         id: Math.random().toString(36).slice(2),
@@ -87,25 +104,47 @@ export default function TodoApp() {
     );
   };
 
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+  const deleteTask = async (id: string) => {
+    try {
+      const response = await fetch(`/api/todos/${id}/deleteTodo`, {
+        method: "DELETE",
+      });
+
+      // Log the response for debugging
+      const responseData = await response.json();
+      console.log("Response Data:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.error || "Failed to delete todo");
+      }
+
+      console.log(`Todo with ID ${id} deleted.`);
+
+      // Update the tasks state immediately
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    } catch (err) {
+      console.error("Error deleting task:", err);
+      // Optionally show an error message to the user
+    }
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    const matchesStatus =
-      filter === "all"
-        ? true
-        : filter === "active"
-        ? !task.completed
-        : task.completed;
+  const filteredTasks = Array.isArray(tasks)
+    ? tasks.filter((task) => {
+        const matchesStatus =
+          filter === "all"
+            ? true
+            : filter === "active"
+            ? !task.completed
+            : task.completed;
 
-    const matchesTags =
-      selectedTags.length === 0
-        ? true
-        : task.tags?.some((tag) => selectedTags.includes(tag));
+        const matchesTags =
+          selectedTags.length === 0
+            ? true
+            : task.tags?.some((tag) => selectedTags.includes(tag));
 
-    return matchesStatus && matchesTags;
-  });
+        return matchesStatus && matchesTags;
+      })
+    : [];
 
   const allTags = Array.from(new Set(tasks.flatMap((task) => task.tags || [])));
 
@@ -134,7 +173,7 @@ export default function TodoApp() {
                   <Brain className="h-8 w-8 text-violet-400" />
                 </motion.div>
                 <h1 className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-3xl font-bold text-transparent">
-                  Neural Tasks
+                  ToDo
                 </h1>
                 <Sparkles className="h-5 w-5 text-violet-400" />
               </div>
@@ -151,13 +190,12 @@ export default function TodoApp() {
               </div>
             </div>
 
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+            <div className="flex gap-2 overflow-x-hidden overflow-y-hidden pb-2 md:pb-0">
               {(["all", "active", "completed"] as const).map((f) => (
                 <motion.button
                   key={f}
                   onClick={() => {
                     setFilter(f);
-                    play("click");
                   }}
                   className={`group relative overflow-hidden rounded-xl px-3 py-1 text-sm transition-colors ${
                     filter === f
@@ -194,7 +232,6 @@ export default function TodoApp() {
                 tasks={tasks}
                 onAddSuggestion={(suggestion) => {
                   addTask(suggestion);
-                  play("add");
                 }}
               />
             </div>
@@ -205,7 +242,6 @@ export default function TodoApp() {
                 onSuggestedTagClick={(tag) => {
                   if (!selectedTags.includes(tag)) {
                     setSelectedTags([...selectedTags, tag]);
-                    play("click");
                   }
                 }}
               />
@@ -227,7 +263,6 @@ export default function TodoApp() {
                         ? selectedTags.filter((t) => t !== tag)
                         : [...selectedTags, tag]
                     );
-                    play("click");
                   }}
                   className={`relative overflow-hidden rounded-full px-3 py-1 text-sm transition-all ${
                     selectedTags.includes(tag)
@@ -255,7 +290,6 @@ export default function TodoApp() {
                 <motion.button
                   onClick={() => {
                     setSelectedTags([]);
-                    play("click");
                   }}
                   className="rounded-full px-3 py-1 text-sm text-white/40 hover:text-white/60"
                   whileHover={{ scale: 1.05 }}

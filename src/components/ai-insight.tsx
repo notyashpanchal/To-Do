@@ -15,10 +15,13 @@ interface Task {
 
 interface AIInsightsProps {
   tasks: Task[];
-  onSuggestedTagClick: (tag: string) => void;
+  onSuggestedTagClickAction: (tag: string) => void;
 }
 
-export function AIInsights({ tasks, onSuggestedTagClick }: AIInsightsProps) {
+export function AIInsights({
+  tasks,
+  onSuggestedTagClickAction,
+}: AIInsightsProps) {
   const analysis = useTaskAnalysis(tasks);
 
   return (
@@ -123,7 +126,7 @@ export function AIInsights({ tasks, onSuggestedTagClick }: AIInsightsProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.1 }}
-                    onClick={() => onSuggestedTagClick(tag)}
+                    onClick={() => onSuggestedTagClickAction(tag)}
                     className="rounded-full bg-white/5 px-3 py-1 text-sm text-white/60 transition-colors hover:bg-white/10 hover:text-white"
                   >
                     {tag}
