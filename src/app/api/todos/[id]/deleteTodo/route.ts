@@ -1,11 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/utils/prisma";
-import { NextRequest } from "next/server";
-// import Todo from "@/types/todo";
-import { NextResponse } from "next/server";
-
-// type Data = {
-//     todos : Todo[]
-// }
 
 export async function DELETE(request: NextRequest) {
     try {
@@ -19,14 +13,15 @@ export async function DELETE(request: NextRequest) {
             where: { id: todoId },
         });
 
-        return NextResponse.json({ success: true, message: 'Todo deleted successfully.' }, { status: 200 });
+        return NextResponse.json(
+            { success: true, message: 'Todo deleted successfully.' },
+            { status: 200 }
+        );
     } catch (error) {
         console.error("Error Deleting Todo: ", error);
-        return NextResponse.json({
-            success: false,
-            message: "Something went wrong",
-        }, {
-            status: 500,
-        });
+        return NextResponse.json(
+            { success: false, message: "Something went wrong" },
+            { status: 500 }
+        );
     }
 }
