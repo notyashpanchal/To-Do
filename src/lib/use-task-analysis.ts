@@ -84,6 +84,7 @@ export function useTaskAnalysis(tasks: Task[]) {
 
         const aiAnalysis = JSON.parse(text)
         setAnalysis(aiAnalysis)
+        
       } catch (error) {
         console.error("Error analyzing tasks:", error)
         setError(error as Error)
@@ -93,7 +94,13 @@ export function useTaskAnalysis(tasks: Task[]) {
     }
 
     analyzeTaskPatterns()
-  }, [tasks])
+  }, [tasks]);
+
+  useEffect(() => {
+    if (error) {
+      console.log("Task analysis error:", error);
+    }
+  }, [error]);
 
   return analysis
 }
