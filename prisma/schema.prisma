@@ -14,9 +14,18 @@ datasource db {
 }
 
 model Todo {
-  id          String   @id @default(uuid()) @map("_id")
+  id          String    @id @default(uuid()) @map("_id")
   title       String
-  isCompleted Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isCompleted Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  priority    Priority?
+  date        DateTime?
+  tags        String[]
+}
+
+enum Priority {
+  low
+  medium
+  high
 }
