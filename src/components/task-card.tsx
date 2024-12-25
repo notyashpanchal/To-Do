@@ -31,7 +31,7 @@ interface TaskCardProps {
     completedAt?: number;
   };
   onComplete: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDeleteAction: (id: string) => void;
   index: number;
   isConnectedToNext?: boolean;
 }
@@ -39,7 +39,7 @@ interface TaskCardProps {
 export function TaskCard({
   task,
   onComplete,
-  onDelete,
+  onDeleteAction,
   isConnectedToNext,
 }: TaskCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ export function TaskCard({
     if (!card) return;
 
     const cleanup = onGesture(card, {
-      onSwipeLeft: () => onDelete(task.id),
+      onSwipeLeft: () => onDeleteAction(task.id),
       onSwipeRight: () => onComplete(task.id),
     });
 
@@ -117,7 +117,7 @@ export function TaskCard({
     scale,
     onGesture,
     task.id,
-    onDelete,
+    onDeleteAction,
     onComplete,
   ]);
 
@@ -266,7 +266,7 @@ export function TaskCard({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => {
-                  onDelete(task.id);
+                  onDeleteAction(task.id);
                 }}
                 className="rounded-lg p-1.5 md:p-2 text-white/40 transition-colors hover:bg-rose-500/20 hover:text-rose-400"
               >

@@ -112,7 +112,7 @@ export default function TodoApp() {
 
   const deleteTask = async (id: string) => {
     try {
-      const response = await fetch(`/api/todos/${id}/deleteTodo`, {
+      const response = await fetch(`/api/todos/${id}`, {
         method: "DELETE",
       });
 
@@ -319,7 +319,7 @@ export default function TodoApp() {
                   task={task}
                   index={index}
                   onComplete={toggleTask}
-                  onDelete={deleteTask}
+                  onDeleteAction={deleteTask}
                   isConnectedToNext={index < filteredTasks.length - 1}
                 />
               ))}

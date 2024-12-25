@@ -29,3 +29,49 @@ export async function GET() {
     }
     
 }
+export async function POST(req:Request) {
+
+    try {
+        const bodyText = await req.text();
+        const body = bodyText ? JSON.parse(bodyText) : null;
+
+        if (!body || typeof body.title !== 'string') {
+            return NextResponse.json({
+                success: false,
+                message: "Title is required and must be a string."
+            }, {
+                status: 400
+            });
+        }
+
+        const { title, priority, date, tags } = body;
+
+        const newTodo = await prisma.todo.create({
+        data: {
+            title,
+            priority, 
+            date,   
+            tags,
+            },
+        });
+
+        return NextResponse.json({
+            success:true,
+            todo:newTodo,
+            message: "Todo created successfully."
+        },{
+            status:201
+        })
+
+        
+    } catch (error) {
+        console.error("Error Adding Todo: ", error instanceof Error ? error.message : error);
+        return NextResponse.json({
+            success: false,
+            message: "Something went wrong",
+        }, {
+            status: 500,
+        });
+    }
+    
+}

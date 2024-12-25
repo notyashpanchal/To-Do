@@ -38,7 +38,7 @@ export function AddTask({ onAdd }: AddTaskProps) {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`api/createTodo`, {
+      const response = await axios.post(`api/todos`, {
         title,
         priority,
         dueDate: dueDate ? dueDate.toISOString() : undefined,
