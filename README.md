@@ -6,7 +6,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
 
 Below is an example screenshot of the Todo App:
 
-![Todo App Screenshot](/fussai.png)
+![Todo App Screenshot](https://github.com/notyashpanchal/To-Do/blob/master/public/fussai.png)
 
 
 
