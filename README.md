@@ -1,6 +1,6 @@
 # Todo App
 
-A comprehensive Todo application built with **Next.js**, **Prisma**, and **MongoDB**, providing a robust solution for task management with features like task creation, updates, prioritization, and analysis.
+A comprehensive Todo application built with **Next.js**, **Prisma**, and **MongoDB**, providing a robust solution for task management with features like task creation, prioritization, and analysis.
 
 ## Features
 
@@ -22,7 +22,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
 
 ### Prerequisites
 - Node.js (>=14.x)
-- npm or yarn
+- pnpm or yarn
 - MongoDB instance (local or cloud-based, e.g., MongoDB Atlas)
 
 ### Steps
@@ -35,7 +35,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
 
 2. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    # or
    yarn install
    ```
@@ -53,7 +53,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
 
 5. Start the development server:
    ```bash
-   npm run dev
+   pnpm run dev
    # or
    yarn dev
    ```
@@ -76,7 +76,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
   }
   ```
 
-### Get All Todos
+<!-- ### Get All Todos
 - **Endpoint**: `GET /api/todos`
 
 ### Update a Todo
@@ -87,7 +87,7 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
     "title": "Updated Task Title",
     "completed": true
   }
-  ```
+  ``` -->
 
 ### Delete a Todo
 - **Endpoint**: `DELETE /api/todos/:id`
@@ -100,8 +100,8 @@ A comprehensive Todo application built with **Next.js**, **Prisma**, and **Mongo
 │   │   ├── api
 │   │   │   └── todos
 │   │   │       ├── [id]
-│   │   │       │   └── deleteTodo
-│   │   │       │       └── route.ts
+│   │   │       │   └── route.ts
+│   │   │       │
 │   │   │       └── route.ts
 │   ├── components
 │   ├── pages
