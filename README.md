@@ -2,7 +2,12 @@
 
 A comprehensive Todo application built with **Next.js**, **Prisma**, and **MongoDB**, providing a robust solution for task management with features like task creation, prioritization, and analysis.
 
-![Todo App Screenshot](./public/fussai.png)
+## Screenshots
+
+Below is an example screenshot of the Todo App:
+
+![Todo App Screenshot](/fussai.png)
+
 
 
 ## Features
